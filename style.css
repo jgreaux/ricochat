@@ -1,0 +1,22 @@
+#playground{
+    width: 320px;
+}
+.field{
+
+    height: 38px;
+    width: 38px;
+    float: left;
+    border: 1px solid black;
+}
+.rightfence{
+    border-right: 1px solid pink;
+}
+.leftfence{
+    border-left: 1px solid pink;
+}
+.upfence{
+    border-top: 1px solid pink;
+}
+.downfence{
+    border-bottom: 1px solid pink;
+}
