@@ -1,5 +1,14 @@
+#player{
+    position: absolute;
+    background-color: blue;
+    margin: 1px;
+    height: 38px;
+    width: 38px;
+    transition-duration: 1s;
+}
 #playground{
     width: 640px;
+    margin: auto;
 }
 .field{
     height: 38px;
