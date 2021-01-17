@@ -1,4 +1,4 @@
-#player{
+.player{
     position: absolute;
     background-color: blue;
     margin: 1px;
@@ -9,6 +9,24 @@
 #playground{
     width: 640px;
     margin: auto;
+}
+#up, #down, #right, #left{
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    border: 2px solid black;
+}
+#left{
+    transform: translate(-24px, 7px);
+}
+#right{
+    transform: translate(38px, 7px);
+}
+#down{
+    transform: translate(7px, 38px);
+}
+#up{
+    transform: translate(7px, -24px);
 }
 .field{
     height: 38px;

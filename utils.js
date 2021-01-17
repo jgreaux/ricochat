@@ -1,9 +1,11 @@
-const mapCount = (mp, mapName) => {
-    console.log(mapName + ' = ' + mp.length);
+let currentPlayer = null;
+const players = {
+    player1: {pos:0},
+    player2: {pos:1}
 }
+const playground = document.getElementById("playground");
 
-//--------------------------------------------------------------------------------------//
-
+//-------------------------------------------------
 const rotateField = (value) => {
     switch (value) {
         case 1:
@@ -59,93 +61,7 @@ const rotateField = (value) => {
     }
 }
 
-//--------------------------------------------------------------------------------------//
-
-const rotateClockWise = (map, width) => {
-    let combineMap = [];
-    for (let x = 0; x < width; x++) {
-        for (let y = width - 1; y> -1; y--) {
-            combineMap.push(rotateField(navigateXY(map, width, x, y)));
-        }
-    }
-    return combineMap;
-}
-
-const joinMapHorizontal = (firstMap, secondMap, width) => {
-    let countMap1 = 0;
-    let countMap2 = 0;
-    let first = true;
-    let result = [];
-    while (map2.length > countMap2) {
-        for (let index = 0; index < width/2; index++) {
-            result.push(first ? firstMap[countMap1] : secondMap[countMap2]);
-            if (first) {
-                countMap1++;
-            } else {
-                countMap2++;
-            }
-        }
-        first = !first;
-    }
-    return result;
-}
-
-const joinMapVertical = (firstMap, secondMap) => {
-    return [...firstMap].concat(secondMap);
-}
-
-const navigateXY = (map, width, x, y) => {
-    const posY = width * y;
-    return map[posY + x];
-}
-
-const navigatePixelXY = (width, pos) => {
-    const fieldWidth = 40;
-    const posX = (pos%width) * fieldWidth;
-    const posY = Math.trunc(pos/width) * fieldWidth;
-
-    console.log("width : ", width);
-    console.log("x : ",posX);
-    console.log("y : ",posY);
-
-    return (posX+"px, "+posY+"px");
-}
-
-const shuffleArray = (inputArray) => {
-    inputArray.sort(() => Math.random() - 0.5);
-}
-
-const createMap = () => {
-    let maps = [];
-    maps.push([...map1], [...map2], [...map3], [...map4]);
-    shuffleArray(maps);
-    for (let index = 0; index < maps.length; index++) {
-        for (let index2 = 0; index2 < index; index2++) {
-            maps[index] = rotateClockWise(maps[index], 8);
-        }
-    }
-    const upMap = joinMapHorizontal(maps[0], maps[1], 16);
-    const downMap = joinMapHorizontal(maps[3], maps[2], 16);
-    return joinMapVertical(upMap, downMap);
-}
-
-//-----------------------------------------------------------
-
-const movePlayer = (pId, pos, width) => {
-    const player = document.getElementById(pId);
-    player.setAttribute("style","transform: translate("+navigatePixelXY(width,pos)+")");
-}
-
 //-----------------------------------------------------//
-const mapManagedInput = (ev)=>{
-    let fieldPos = ev.target.id;
-    console.log(fieldPos);
-    movePlayer("player", fieldPos, 16);
-    
-    
-}
-//-----------------------------------------------------//
-
 const mapToDOM = (map, dom) => {
     map.forEach((element, index) => {
         let field = document.createElement('div');
@@ -252,9 +168,167 @@ const mapToDOM = (map, dom) => {
     });
 }
 
-const init = (map)=>{
-    let playground = document.getElementById('playground');
-    playground.addEventListener('click', mapManagedInput);
+//--------------------------------------------------------------------------------------//
 
+const rotateClockWise = (map, width) => {
+    let combineMap = [];
+    for (let x = 0; x < width; x++) {
+        for (let y = width - 1; y> -1; y--) {
+            combineMap.push(rotateField(getFieldXY(map, width, x, y)));
+        }
+    }
+    return combineMap;
+}
+
+const joinMapHorizontal = (firstMap, secondMap, width) => {
+    let countMap1 = 0;
+    let countMap2 = 0;
+    let first = true;
+    let result = [];
+    while (map2.length > countMap2) {
+        for (let index = 0; index < width/2; index++) {
+            result.push(first ? firstMap[countMap1] : secondMap[countMap2]);
+            if (first) {
+                countMap1++;
+            } else {
+                countMap2++;
+            }
+        }
+        first = !first;
+    }
+    return result;
+}
+
+const joinMapVertical = (firstMap, secondMap) => {
+    return [...firstMap].concat(secondMap);
+}
+
+const getFieldXY = (map, width, x, y) => {
+    const posY = width * y;
+    return map[posY + x];
+}
+
+const posToXY = (width, pos) => {
+    const posX = (pos%width);
+    const posY = Math.trunc(pos/width)
+    return {x:posX,y:posY}
+}
+
+
+const computePixelXY = (width, pos) => {
+    const fieldWidth = 40;
+    const posX = (pos%width) * fieldWidth;
+    const posY = Math.trunc(pos/width) * fieldWidth;
+    return (posX+"px, "+posY+"px");
+}
+
+const shuffleArray = (inputArray) => {
+    inputArray.sort(() => Math.random() - 0.5);
+}
+
+const createMap = () => {
+    let maps = [];
+    maps.push([...map1], [...map2], [...map3], [...map4]);
+    shuffleArray(maps);
+    for (let index = 0; index < maps.length; index++) {
+        for (let index2 = 0; index2 < index; index2++) {
+            maps[index] = rotateClockWise(maps[index], 8);
+        }
+    }
+    const upMap = joinMapHorizontal(maps[0], maps[1], 16);
+    const downMap = joinMapHorizontal(maps[3], maps[2], 16);
+    return joinMapVertical(upMap, downMap);
+}
+
+//-------------------------------------------------------//
+
+const createPlayers = () => {
+    Object.keys(players).forEach(element => {
+        const player = document.createElement("div");
+        player.id = element;
+        player.className = "player";
+        playground.appendChild(player);
+        currentPlayer = player;
+        movePlayer(players[element].pos, 16);
+    });
+}
+
+const movePlayer = (pos, width) => {
+    if(currentPlayer == null) return;
+    players[currentPlayer.id].pos = pos;
+    currentPlayer.setAttribute("style","transform: translate("+computePixelXY(width,pos)+")");
+}
+
+const move = (dir) =>{
+    const currentPos = players[currentPlayer.id].pos;
+    //trouver la pos final (obstacle ou rebord)
+    const newPos = 119;
+    //Déplacer le joueur et résoudre la case final
+    movePlayer(newPos,16);
+}
+
+//-----------------------------------------------------//
+
+const resetInputPlayer = () => {
+    if(currentPlayer == null) return;
+    currentPlayer.innerHTML = "";
+    currentPlayer = null;
+}
+
+const displayInputPlayer = () => {
+    if(currentPlayer.innerHTML !== "") {
+        resetInputPlayer();
+        return;
+    }
+
+    const upButton = document.createElement("div");
+    const downButton = document.createElement("div");
+    const rightButton = document.createElement("div");
+    const leftButton = document.createElement("div");
+
+    upButton.id = "up";
+    downButton.id = "down";
+    rightButton.id = "right";
+    leftButton.id = "left";
+
+    currentPlayer.appendChild(upButton);
+    currentPlayer.appendChild(downButton);
+    currentPlayer.appendChild(rightButton);
+    currentPlayer.appendChild(leftButton);
+
+}
+
+//-----------------------------------------------------//
+const mapManagedInput = (ev)=>{
+    const target = ev.target;
+
+    switch (target.id) {
+        case (target.id.match(/player[1-9]/) || {}).input:
+            resetInputPlayer();
+            currentPlayer = target;
+            displayInputPlayer();
+            break;
+        case "up":
+            move("up");
+            break;
+        case "down":
+            move("down");
+            break;
+        case "right":
+            move("right");
+            break;
+        case "left":
+            move("left");
+            break;
+        default:
+            resetInputPlayer();
+            break;
+    }
+}
+
+//-----------------------------------------------------//
+const init = (map)=>{
+    playground.addEventListener('click', mapManagedInput);
+    createPlayers();
     mapToDOM(map, playground);
 }
