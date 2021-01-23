@@ -69,6 +69,21 @@ const mapToDOM = (map, dom) => {
         field.classList.add("field");
 
         switch (element) {
+            case -5:
+                field.classList.add("coin")
+                break;
+            case -4:
+                field.classList.add("border")
+                break;
+            case -3:
+                field.classList.add("border")
+                break;
+            case -2:
+                field.classList.add("border")
+                break;
+            case -1:
+                field.classList.add("border")
+                break;
             case 1:
                 field.classList.add("rightfence")
                 break;
@@ -237,7 +252,40 @@ const createMap = () => {
     }
     const upMap = joinMapHorizontal(maps[0], maps[1], 16);
     const downMap = joinMapHorizontal(maps[3], maps[2], 16);
-    return joinMapVertical(upMap, downMap);
+    return computeBorderMap(joinMapVertical(upMap, downMap));
+}
+
+const computeBorderMap = (map) => {
+    const coin = [0,mapWidth - 1, map.length - mapWidth, map.length-1];
+    const up = range(coin[0] + 1, coin[1] - 1, 1);
+    const right = range(coin[1] + mapWidth, coin[3] - mapWidth, mapWidth );
+    const down = range(coin[2] + 1,coin[3] - 1, 1);
+    const left = range(coin[0] + mapWidth, coin[2] - mapWidth, mapWidth);
+
+    up.forEach( (key) => {
+        map[key] = -1;
+    })
+    right.forEach( (key) => {
+        map[key] = -2;
+    })
+    down.forEach( (key) => {
+        map[key] = -3;
+    })
+    left.forEach( (key) => {
+        map[key] = -4;
+    })
+    coin.forEach( (key) => {
+        map[key] = -5;
+    })
+
+    return map;
+}
+
+const range = (n,p,step) => {
+    if(step == undefined) step = 1;
+    if(n == p) return [n];
+    if(n > p) return [];
+    return [n].concat(range(n+step,p,step));
 }
 
 //-------------------------------------------------------//
@@ -261,10 +309,34 @@ const movePlayer = (pos, width) => {
 
 const move = (dir) =>{
     const currentPos = players[currentPlayer.id].pos;
-    //trouver la pos final (obstacle ou rebord)
-    const newPos = 119;
-    //Déplacer le joueur et résoudre la case final
-    movePlayer(newPos,16);
+    movePlayer(computeDestination(currentPos, dir, mapWidth),mapWidth);
+}
+
+const computeDestination = (pos, direction, width) => {
+    let step = null;
+    let destination = null;
+    let currentPos = pos; 
+     switch (direction) {
+         case 'right':
+            step = 1;
+            break;
+        case 'left':
+            step = -1;
+            break;
+        case 'up':
+            step = - width;
+            break;
+        case 'down':
+            step = width;
+            break;
+     }
+    while (destination === null) {
+        currentPos += step;
+        if (currentMap[currentPos] != 0) {
+            destination = currentPos;
+        }
+    }
+    return currentPos;
 }
 
 //-----------------------------------------------------//
@@ -327,6 +399,7 @@ const mapManagedInput = (ev)=>{
 }
 
 //-----------------------------------------------------//
+
 const init = (map)=>{
     playground.addEventListener('click', mapManagedInput);
     createPlayers();

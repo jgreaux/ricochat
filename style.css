@@ -46,3 +46,9 @@
 .downfence{
     border-bottom: 1px solid pink;
 }
+.border{
+    background-color: gray;
+}
+.coin{
+    background-color: black;
+}
