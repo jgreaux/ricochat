@@ -1,3 +1,4 @@
+
 let currentPlayer = null;
 const players = {
     player1: {pos:0},
@@ -65,116 +66,140 @@ const rotateField = (value) => {
 const mapToDOM = (map, dom) => {
     map.forEach((element, index) => {
         let field = document.createElement('div');
-        field.id = index;
+        field.id = 'f' + index;
         field.classList.add("field");
 
         switch (element) {
-            case -5:
+            case -4:
+                field.classList.add("BOC_right_up")
                 field.classList.add("coin")
                 break;
-            case -4:
-                field.classList.add("border")
-                break;
             case -3:
-                field.classList.add("border")
+                field.classList.add("BOC_left_up")
+                field.classList.add("coin")
                 break;
-            case -2:
-                field.classList.add("border")
-                break;
+            case -2:   
+                field.classList.add("BOC_right_down")
+                field.classList.add("coin")
+                break;    
             case -1:
-                field.classList.add("border")
+                field.classList.add("BOC_left_down")
+                field.classList.add("coin")
                 break;
             case 1:
-                field.classList.add("rightfence")
+                field.classList.add("border")
+                field.classList.add("right")
                 break;
             case 2:
-                field.classList.add("leftfence")
+                field.classList.add("border")
+                field.classList.add("left")
                 break;
             case 3:
-                field.classList.add("upfence")
+                field.classList.add("border")
                 break;
             case 4:
-                field.classList.add("downfence")
+                field.classList.add("border")
+                field.classList.add("down")
                 break;
             case 5:
                 field.classList.add("BOC_red")
                 field.classList.add("BOC_right_up")
+                field.classList.add("coin")
                 break;
             case 6:
                 field.classList.add("BOC_red")
                 field.classList.add("BOC_right_down")
+                field.classList.add("coin")
                 break;
             case 7:
                 field.classList.add("BOC_red")
                 field.classList.add("BOC_left_up")
+                field.classList.add("coin")
                 break;
             case 8:
                 field.classList.add("BOC_red")
                 field.classList.add("BOC_left_down")
+                field.classList.add("coin")
                 break;
             case 9:
                 field.classList.add("BOC_blue")
                 field.classList.add("BOC_right_up")
+                field.classList.add("coin")
                 break;
             case 10:
                 field.classList.add("BOC_blue")
                 field.classList.add("BOC_right_down")
+                field.classList.add("coin")
                 break;
             case 11:
                 field.classList.add("BOC_blue")
                 field.classList.add("BOC_left_up")
+                field.classList.add("coin")
                 break;
             case 12:
                 field.classList.add("BOC_blue")
                 field.classList.add("BOC_left_down")
+                field.classList.add("coin")
                 break;
             case 13:
                 field.classList.add("BOC_green")
                 field.classList.add("BOC_right_up")
+                field.classList.add("coin")
                 break;
             case 14:
                 field.classList.add("BOC_green")
                 field.classList.add("BOC_right_down")
+                field.classList.add("coin")
                 break;
             case 15:
                 field.classList.add("BOC_green")
                 field.classList.add("BOC_left_up")
+                field.classList.add("coin")
                 break;
             case 16:
                 field.classList.add("BOC_green")
                 field.classList.add("BOC_left_down")
+                field.classList.add("coin")
                 break;
             case 17:
                 field.classList.add("BOC_yellow")
                 field.classList.add("BOC_right_up")
+                field.classList.add("coin")
                 break;
             case 18:
                 field.classList.add("BOC_yellow")
                 field.classList.add("BOC_right_down")
+                field.classList.add("coin")
                 break;
             case 19:
                 field.classList.add("BOC_yellow")
                 field.classList.add("BOC_left_up")
+                field.classList.add("coin")
                 break;
             case 20:
                 field.classList.add("BOC_yellow")
                 field.classList.add("BOC_left_down")
+                field.classList.add("coin")
                 break;
             case 21:
                 field.classList.add("BOC_multicolor")
                 field.classList.add("BOC_right_up")
+                field.classList.add("coin")
                 break;
             case 22:
                 field.classList.add("BOC_multicolor")
                 field.classList.add("BOC_right_down")
+                field.classList.add("coin")
                 break;
             case 23:
                 field.classList.add("BOC_multicolor")
                 field.classList.add("BOC_left_up")
+                field.classList.add("coin")
                 break;
             case 24:
                 field.classList.add("BOC_multicolor")
                 field.classList.add("BOC_left_down")
+                field.classList.add("coin")
                 break;
             default:
                 break;
@@ -263,20 +288,42 @@ const computeBorderMap = (map) => {
     const left = range(coin[0] + mapWidth, coin[2] - mapWidth, mapWidth);
 
     up.forEach( (key) => {
-        map[key] = -1;
+        if (map[key] !== 0) {
+            map[key] = map[key] - 5;
+        }else{
+            map[key] = 3;
+        }
     })
     right.forEach( (key) => {
-        map[key] = -2;
+        if(map[key] === 3){
+            map[key] = -4
+        }else if(map[key] === 4){
+            map[key] = -2;
+        }else{
+            map[key] = 1;
+        }
     })
     down.forEach( (key) => {
-        map[key] = -3;
+        if (map[key] !== 0) {
+            map[key] = map[key] - 3;
+        }else{
+            map[key] = 4;
+        }
     })
     left.forEach( (key) => {
-        map[key] = -4;
+        if(map[key] === 3){
+            map[key] = -3
+        }else if(map[key] === 4){
+            map[key] = -1;
+        }else{
+            map[key] = 2;
+        }
     })
-    coin.forEach( (key) => {
-        map[key] = -5;
-    })
+    //Gestion des coins
+    map[coin[0]] = -3;
+    map[coin[1]] = -4;
+    map[coin[2]] = -1;
+    map[coin[3]] = -2;
 
     return map;
 }

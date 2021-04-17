@@ -5,10 +5,14 @@
     height: 38px;
     width: 38px;
     transition-duration: 1s;
+    z-index: 1;
 }
 #playground{
     width: 640px;
+    height: 640px;
     margin: auto;
+    background-image: url('assets/main48x48.png');
+    background-size: 40px 40px;
 }
 #up, #down, #right, #left{
     position: absolute;
@@ -29,26 +33,43 @@
     transform: translate(7px, -24px);
 }
 .field{
-    height: 38px;
-    width: 38px;
+    height: 40px;
+    width: 40px;
     float: left;
-    border: 1px solid black;
 }
-.rightfence{
-    border-right: 1px solid pink;
-}
-.leftfence{
-    border-left: 1px solid pink;
-}
-.upfence{
-    border-top: 1px solid pink;
-}
-.downfence{
-    border-bottom: 1px solid pink;
-}
+
 .border{
-    background-color: gray;
+    background-image: url('assets/border48x48.png');
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
 }
+
+.right{
+    transform: rotate(90deg);
+}
+
+.down{
+    transform: rotate(180deg);
+}
+
+.left{
+    transform: rotate(270deg);
+}
+
 .coin{
-    background-color: black;
+    background-image: url('assets/corner48x48.png');
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+}
+
+.BOC_left_up{
+    transform: rotate(270deg);
+}
+
+.BOC_left_down{
+    transform: rotate(180deg);
+}
+
+.BOC_right_down{
+    transform: rotate(90deg);
 }
