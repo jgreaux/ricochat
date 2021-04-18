@@ -1,12 +1,35 @@
 .player{
     position: absolute;
-    background-color: blue;
     margin: 1px;
     height: 38px;
     width: 38px;
-    transition-duration: 1s;
     z-index: 1;
+    transition-duration: 1s;
+    background-repeat: no-repeat;
+    background-size: 90%;
+    background-position: center;
 }
+
+.player.current{
+    z-index: 2;
+}
+
+.green{
+    background-image: url('assets/catg.png');
+}
+
+.blue{
+    background-image: url('assets/catb.png');
+}
+
+.yellow{
+    background-image: url('assets/caty.png');
+}
+
+.red{
+    background-image: url('assets/catr.png');
+}
+
 #playground{
     width: 640px;
     height: 640px;
@@ -18,16 +41,22 @@
     position: absolute;
     height: 20px;
     width: 20px;
-    border: 2px solid black;
+    z-index: 2;
+    background-image: url('assets/arrow.png');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 #left{
-    transform: translate(-24px, 7px);
+    background-image: url('assets/arrow.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    transform: translate(-24px, 7px) rotate(270deg);
 }
 #right{
-    transform: translate(38px, 7px);
+    transform: translate(38px, 7px) rotate(90deg);
 }
 #down{
-    transform: translate(7px, 38px);
+    transform: translate(7px, 38px) rotate(180deg);
 }
 #up{
     transform: translate(7px, -24px);
@@ -41,7 +70,7 @@
 .border{
     background-image: url('assets/border48x48.png');
     background-repeat: no-repeat;
-    background-size: 40px 40px;
+    background-size: cover;
 }
 
 .right{
@@ -56,10 +85,10 @@
     transform: rotate(270deg);
 }
 
-.coin{
+.corner{
     background-image: url('assets/corner48x48.png');
     background-repeat: no-repeat;
-    background-size: 40px 40px;
+    background-size: cover;
 }
 
 .BOC_left_up{
@@ -72,4 +101,35 @@
 
 .BOC_right_down{
     transform: rotate(90deg);
+}
+
+.BOC_red{
+    background-image: url('assets/corner48x48.png'),url('./assets/yarnr.png');
+    background-repeat: no-repeat, no-repeat;
+    background-size: cover, 90%;
+
+}
+
+.BOC_green{
+    background-image: url('assets/corner48x48.png'),url('./assets/yarng.png');
+    background-repeat: no-repeat, no-repeat;
+    background-size: cover, 90%;
+}
+
+.BOC_blue{
+    background-image: url('assets/corner48x48.png'),url('./assets/yarnb.png');
+    background-repeat: no-repeat, no-repeat;
+    background-size: cover, 90%;
+}
+
+.BOC_yellow{
+    background-image: url('assets/corner48x48.png'),url('./assets/yarny.png');
+    background-repeat: no-repeat, no-repeat;
+    background-size: cover, 90%;
+}
+
+.BOC_multicolor{
+    background-image: url('assets/corner48x48.png'),url('./assets/yarnm.png');
+    background-repeat: no-repeat, no-repeat;
+    background-size: cover, 90%;
 }

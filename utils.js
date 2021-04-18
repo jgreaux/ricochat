@@ -1,8 +1,10 @@
 
 let currentPlayer = null;
 const players = {
-    player1: {pos:0},
-    player2: {pos:1}
+    player1: {pos:0, color:'blue'},
+    player2: {pos:1, color:'green'},
+    player3: {pos:2, color:'yellow'},
+    player4: {pos:3, color:'red'}
 }
 const playground = document.getElementById("playground");
 
@@ -72,19 +74,19 @@ const mapToDOM = (map, dom) => {
         switch (element) {
             case -4:
                 field.classList.add("BOC_right_up")
-                field.classList.add("coin")
+                field.classList.add("corner")
                 break;
             case -3:
                 field.classList.add("BOC_left_up")
-                field.classList.add("coin")
+                field.classList.add("corner")
                 break;
             case -2:   
                 field.classList.add("BOC_right_down")
-                field.classList.add("coin")
+                field.classList.add("corner")
                 break;    
             case -1:
                 field.classList.add("BOC_left_down")
-                field.classList.add("coin")
+                field.classList.add("corner")
                 break;
             case 1:
                 field.classList.add("border")
@@ -104,102 +106,82 @@ const mapToDOM = (map, dom) => {
             case 5:
                 field.classList.add("BOC_red")
                 field.classList.add("BOC_right_up")
-                field.classList.add("coin")
                 break;
             case 6:
                 field.classList.add("BOC_red")
                 field.classList.add("BOC_right_down")
-                field.classList.add("coin")
                 break;
             case 7:
                 field.classList.add("BOC_red")
                 field.classList.add("BOC_left_up")
-                field.classList.add("coin")
                 break;
             case 8:
                 field.classList.add("BOC_red")
                 field.classList.add("BOC_left_down")
-                field.classList.add("coin")
                 break;
             case 9:
                 field.classList.add("BOC_blue")
                 field.classList.add("BOC_right_up")
-                field.classList.add("coin")
                 break;
             case 10:
                 field.classList.add("BOC_blue")
                 field.classList.add("BOC_right_down")
-                field.classList.add("coin")
                 break;
             case 11:
                 field.classList.add("BOC_blue")
                 field.classList.add("BOC_left_up")
-                field.classList.add("coin")
                 break;
             case 12:
                 field.classList.add("BOC_blue")
                 field.classList.add("BOC_left_down")
-                field.classList.add("coin")
                 break;
             case 13:
                 field.classList.add("BOC_green")
                 field.classList.add("BOC_right_up")
-                field.classList.add("coin")
                 break;
             case 14:
                 field.classList.add("BOC_green")
                 field.classList.add("BOC_right_down")
-                field.classList.add("coin")
                 break;
             case 15:
                 field.classList.add("BOC_green")
                 field.classList.add("BOC_left_up")
-                field.classList.add("coin")
                 break;
             case 16:
                 field.classList.add("BOC_green")
                 field.classList.add("BOC_left_down")
-                field.classList.add("coin")
                 break;
             case 17:
                 field.classList.add("BOC_yellow")
                 field.classList.add("BOC_right_up")
-                field.classList.add("coin")
                 break;
             case 18:
                 field.classList.add("BOC_yellow")
                 field.classList.add("BOC_right_down")
-                field.classList.add("coin")
                 break;
             case 19:
                 field.classList.add("BOC_yellow")
                 field.classList.add("BOC_left_up")
-                field.classList.add("coin")
                 break;
             case 20:
                 field.classList.add("BOC_yellow")
                 field.classList.add("BOC_left_down")
-                field.classList.add("coin")
                 break;
             case 21:
                 field.classList.add("BOC_multicolor")
                 field.classList.add("BOC_right_up")
-                field.classList.add("coin")
                 break;
             case 22:
                 field.classList.add("BOC_multicolor")
                 field.classList.add("BOC_right_down")
-                field.classList.add("coin")
                 break;
             case 23:
                 field.classList.add("BOC_multicolor")
                 field.classList.add("BOC_left_up")
-                field.classList.add("coin")
                 break;
             case 24:
                 field.classList.add("BOC_multicolor")
                 field.classList.add("BOC_left_down")
-                field.classList.add("coin")
                 break;
             default:
                 break;
@@ -341,7 +323,8 @@ const createPlayers = () => {
     Object.keys(players).forEach(element => {
         const player = document.createElement("div");
         player.id = element;
-        player.className = "player";
+        player.classList.add("player");
+        player.classList.add(players[element].color);
         playground.appendChild(player);
         currentPlayer = player;
         movePlayer(players[element].pos, 16);
@@ -391,6 +374,7 @@ const computeDestination = (pos, direction, width) => {
 const resetInputPlayer = () => {
     if(currentPlayer == null) return;
     currentPlayer.innerHTML = "";
+    currentPlayer.classList.remove("current")
     currentPlayer = null;
 }
 
@@ -425,6 +409,7 @@ const mapManagedInput = (ev)=>{
         case (target.id.match(/player[1-9]/) || {}).input:
             resetInputPlayer();
             currentPlayer = target;
+            currentPlayer.classList.add("current");
             displayInputPlayer();
             break;
         case "up":
