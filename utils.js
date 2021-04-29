@@ -1,12 +1,16 @@
 
 let currentPlayer = null;
-const players = {
+let players = {}
+const initP = {
     player1: {pos:0, color:'blue'},
     player2: {pos:1, color:'green'},
     player3: {pos:2, color:'yellow'},
     player4: {pos:3, color:'red'}
 }
-const playground = document.getElementById("playground");
+
+function initPlayers() {
+    players = JSON.parse(JSON.stringify(initP));
+}
 
 //-------------------------------------------------
 const rotateField = (value) => {
@@ -319,7 +323,7 @@ const range = (n,p,step) => {
 
 //-------------------------------------------------------//
 
-const createPlayers = () => {
+const createPlayers = (playground) => {
     Object.keys(players).forEach(element => {
         const player = document.createElement("div");
         player.id = element;
@@ -344,6 +348,7 @@ const move = (dir) =>{
 }
 
 const computeDestination = (pos, direction, width, color) => {
+    const currentMap = gameState.currentMap;
     let step = getDir(direction, width);
     let currentPos = pos; 
     
@@ -491,12 +496,28 @@ const mapManagedInput = (ev)=>{
 
 //-----------------------------------------------------//
 
-const init = (map)=>{
+const initGame = ()=>{
+    gameState.currentMap = createMap();
+    const newGame = document.createElement('div');
+    const resetButton = document.createElement('button');
+    resetButton.onclick = resetGame;
+    resetButton.innerHTML = 'X';
+    const playground = document.createElement('div');
+    playground.id = 'playground';
     playground.addEventListener('click', mapManagedInput);
-    createPlayers();
-    mapToDOM(map, playground);
+    initPlayers();
+    createPlayers(playground);
+    mapToDOM(gameState.currentMap, playground);
+
+    newGame.appendChild(resetButton);
+    newGame.appendChild(playground);
+    return newGame;
 }
 
+function resetGame() {
+    document.body.removeChild(game);
+    document.body.appendChild(home);
+}
 //-----------------------------------------------------//
 const catSound = document.createElement('audio');
 catSound.innerHTML = `
