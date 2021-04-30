@@ -1,5 +1,7 @@
-function createHome(){
-    const home = document.createElement('div');
+import {newGame, game, home} from "../app.js";
+
+export function createHome(){
+    const myHome = document.createElement('div');
     const namePlayer = document.createElement('input');
     namePlayer.type = "text";
     const buttonAdd = document.createElement('button');
@@ -10,12 +12,12 @@ function createHome(){
     buttonPlay.innerHTML = 'PLAY';
     buttonPlay.onclick = () => startPlay(listPlayers);
 
-    home.appendChild(namePlayer);
-    home.appendChild(buttonAdd);
-    home.appendChild(listPlayers);
-    home.appendChild(buttonPlay);
+    myHome.appendChild(namePlayer);
+    myHome.appendChild(buttonAdd);
+    myHome.appendChild(listPlayers);
+    myHome.appendChild(buttonPlay);
 
-    return home;
+    return myHome;
 }
 
 function addPlayer(namePlayer,listPlayers) {

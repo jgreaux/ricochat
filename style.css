@@ -1,4 +1,4 @@
-.player{
+.pawn{
     position: absolute;
     margin: 1px;
     height: 38px;
@@ -10,7 +10,7 @@
     background-position: center;
 }
 
-.player.current{
+.pawn.current{
     z-index: 2;
 }
 
