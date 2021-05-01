@@ -94,7 +94,11 @@ export function range (n,p,step) {
 }
 
 //-----------------------------------------------------//
-export const catSound = document.createElement('audio');
-catSound.innerHTML = `
-<source src="assets/cat.mp3" type="audio/mpeg">
-`;
+export function playCat(){
+    const catSound = document.createElement('audio');
+    catSound.innerHTML = `
+    <source src="assets/cat.mp3" type="audio/mpeg">
+    `;
+    catSound.play();
+    setTimeout(()=> catSound.remove(),800);
+}

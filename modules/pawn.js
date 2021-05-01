@@ -1,4 +1,4 @@
-import {computePixelXY, catSound} from "./utils.js";
+import {computePixelXY, playCat} from "./utils.js";
 import {computeDestination} from "./game.js"
 import {mapWidth} from "./map.js";
 
@@ -18,7 +18,7 @@ export function initPawns() {
 export function move (dir) {
     const pawn = pawns[currentPawn.id];
     movePawn(computeDestination(pawn.pos, dir, mapWidth, pawn.color),mapWidth);
-    catSound.play();
+    playCat();
 }
 
 function movePawn (pos, width) {
