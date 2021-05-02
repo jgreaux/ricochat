@@ -1,9 +1,32 @@
 import {gameState, game, home} from "../app.js";
-import {createMap, mapToDOM} from "./map.js";
-import {mapManagedInput, initPawns, createPawns, pawns, move} from "./pawn.js";
+import {mapToDOM} from "./map.js";
+import {mapManagedInput, createPawns, pawns, move, resetPawns} from "./pawn.js";
+
+let headerPlayerName;
+let headerPlayerScore;
+
+export const updateScore = ()=>{
+    if (headerPlayerScore.innerHTML) {
+        headerPlayerScore.innerHTML = gameState.players[Object.keys(gameState.players)[gameState.currentPlayer]];
+    }
+}
+
+const createHeaderPlayer = () =>{
+    const players = gameState.players;
+    const firstPlayerName = Object.keys(players)[0];
+    const newHeader = document.createElement('div');
+    headerPlayerName = document.createElement('a');
+    headerPlayerName.classList.add('current_player_name');
+    headerPlayerName.innerHTML = firstPlayerName;
+    headerPlayerScore = document.createElement('a');
+    headerPlayerScore.classList.add('current_player_score');
+    headerPlayerScore.innerHTML = players[firstPlayerName];
+    newHeader.appendChild(headerPlayerName);
+    newHeader.appendChild(headerPlayerScore);
+    return newHeader;
+}
 
 export const initGame = ()=>{
-    gameState.currentMap = createMap();
     const newGame = document.createElement('div');
     const resetButton = document.createElement('button');
     resetButton.onclick = resetGame;
@@ -13,11 +36,11 @@ export const initGame = ()=>{
     playground.addEventListener('click', mapManagedInput);
     playground.addEventListener('touchmove', slideMove);
     playground.addEventListener('touchend', slideEnd);
-    initPawns();
     createPawns(playground);
-    mapToDOM(gameState.currentMap, playground);
+    mapToDOM(gameState.map, playground);
 
     newGame.appendChild(resetButton);
+    newGame.appendChild(createHeaderPlayer());
     newGame.appendChild(playground);
     return newGame;
 }
@@ -37,10 +60,10 @@ const slideEnd = (e) => {
     const dy = end.y - start.y;
     const hor = Math.abs(dx) > Math.abs(dy);
     slideCash = [];
-    if(hor && dx > 0) return move("right");
-    if(hor && dx < 0) return move("left");
-    if(!hor && dy > 0) return move("down");
-    if(!hor && dy < 0) return move("up");
+    if(hor && dx > 0) return doMove("right");
+    if(hor && dx < 0) return doMove("left");
+    if(!hor && dy > 0) return doMove("down");
+    if(!hor && dy < 0) return doMove("up");
 }
 
 function resetGame() {
@@ -49,7 +72,7 @@ function resetGame() {
 }
 
 export function computeDestination (pos, direction, width, color) {
-    const currentMap = gameState.currentMap;
+    const currentMap = gameState.map;
     let step = getDir(direction, width);
     let currentPos = pos; 
     
@@ -86,7 +109,11 @@ const getDir = (dir, width) =>{
 }
 
 const canIGo = (currentPos,currentCase, nextCase, direction) => {
-    return !isBorder(currentCase, nextCase, direction) && !otherPawn(currentPos + direction);
+    return !isBorder(currentCase, nextCase, direction) && !otherPawn(currentPos + direction) && !isVictory(currentCase);
+}
+
+const isVictory = (currentCase) => {
+    return currentCase === 25;
 }
 
 const isBorder = (currentCase, nextCase, direction) => {
@@ -131,4 +158,19 @@ const yarnTurn = (currentCase, step, width, color) => {
     if (horizontalMove && !borderIsUp) return -width;
     if (!horizontalMove && borderIsRight) return -1;
     if (!horizontalMove && !borderIsRight) return 1;
+}
+
+export const nextPlayer = () => {
+    gameState.currentPlayer++;
+    updateScore();
+    const players = Object.keys(gameState.players);
+    if(players[gameState.currentPlayer]){
+        const score = gameState.players[players[gameState.currentPlayer]];
+        headerPlayerName.innerHTML = players[gameState.currentPlayer];
+        headerPlayerScore.innerHTML = score;
+        resetPawns();
+    }else{
+        alert("Félicitation, quelqu'un a gagné !");
+        resetGame();
+    }
 }

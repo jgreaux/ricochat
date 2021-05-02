@@ -1,24 +1,56 @@
-import {computePixelXY, playCat} from "./utils.js";
-import {computeDestination} from "./game.js"
+import {computePixelXY, playCat, getVictoryPos} from "./utils.js";
+import {computeDestination, updateScore, nextPlayer} from "./game.js"
 import {mapWidth} from "./map.js";
+import { gameState } from "../app.js";
 
 export let currentPawn = null;
-export let pawns = {}
-const initP = {
-    pawn1: {pos:0, color:'blue'},
-    pawn2: {pos:1, color:'green'},
-    pawn3: {pos:2, color:'yellow'},
-    pawn4: {pos:3, color:'red'}
+export let pawns = {};
+
+export function initPawns(map) {
+    const posMax = map.length;
+    let newPos = 0;
+    const currentPos = getVictoryPos(mapWidth);
+    const randomPawns = () => {
+        let added = false;
+        while (!added) {
+            newPos = Math.round(Math.random() * posMax);
+            if (!currentPos.includes(newPos)) {
+                currentPos.push(newPos);
+                added = true;
+            }
+        }
+        return newPos;
+    };
+    const newPawns = {
+        pawn1: {pos:randomPawns(), color:'blue'},
+        pawn2: {pos:randomPawns(), color:'green'},
+        pawn3: {pos:randomPawns(), color:'yellow'},
+        pawn4: {pos:randomPawns(), color:'red'}
+    }
+    return newPawns;
 }
 
-export function initPawns() {
-    pawns = JSON.parse(JSON.stringify(initP));
+export function resetPawns() {
+    pawns = JSON.parse(JSON.stringify(gameState.pawns));
+    resetInputPawn();
+    Object.keys(pawns).forEach((pawn)=>{
+        currentPawn = document.getElementById(pawn);
+        movePawn(pawns[pawn].pos, mapWidth);
+    })
+    currentPawn = null;
 }
 
 export function move (dir) {
     const pawn = pawns[currentPawn.id];
     movePawn(computeDestination(pawn.pos, dir, mapWidth, pawn.color),mapWidth);
     playCat();
+    gameState.players[Object.keys(gameState.players)[gameState.currentPlayer]]++;
+    if(getVictoryPos(mapWidth).includes(pawn.pos)) setTimeout(nextPlayer,1000);
+}
+
+function doMove(dir){
+    move(dir);
+    updateScore();
 }
 
 function movePawn (pos, width) {
@@ -68,16 +100,16 @@ export function mapManagedInput (ev) {
             displayInputPawn();
             break;
         case "up":
-            move("up");
+            doMove("up");
             break;
         case "down":
-            move("down");
+            doMove("down");
             break;
         case "right":
-            move("right");
+            doMove("right");
             break;
         case "left":
-            move("left");
+            doMove("left");
             break;
         default:
             resetInputPawn();

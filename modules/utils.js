@@ -93,12 +93,24 @@ export function range (n,p,step) {
     return [n].concat(range(n+step,p,step));
 }
 
+export function getVictoryPos(width){
+    const p1 = ((Math.pow(width,2) - width ) / 2) - 1;
+    const p2 = p1 + 1;
+    const p3 = p1 + width;
+    const p4 = p2 + width;
+    return [p1,p2,p3,p4];
+}
+
 //-----------------------------------------------------//
-export function playCat(){
-    const catSound = document.createElement('audio');
+const catSound = document.createElement('audio');
     catSound.innerHTML = `
     <source src="assets/cat.mp3" type="audio/mpeg">
     `;
+
+export function playCat(){
     catSound.play();
-    setTimeout(()=> catSound.remove(),800);
+    setTimeout(()=>{
+        catSound.pause();
+        catSound.currentTime = 0;
+    },800);
 }

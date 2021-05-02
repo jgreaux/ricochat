@@ -133,3 +133,7 @@
     background-repeat: no-repeat, no-repeat;
     background-size: cover, 90%;
 }
+
+.Victory{
+    background-image: url('assets/crocket.png');
+}

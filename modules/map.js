@@ -125,6 +125,9 @@ export function mapToDOM (map, dom) {
                 field.classList.add("BOC_multicolor")
                 field.classList.add("BOC_left_down")
                 break;
+            case 25:
+                field.classList.add("Victory")
+                break;
             default:
                 break;
         }
@@ -203,17 +206,26 @@ const computeBorderMap = (map) => {
     return map;
 }
 
+export const setVictoryPos = (map, width) => {
+    const newMap = [...map];
+    const victoryPos = _utils.getVictoryPos(width);
+    victoryPos.forEach((val)=>{
+        newMap[val] = 25;
+    });
+    return newMap;
+}
+
 export const createMap = () => {
     let maps = [];
     maps.push([...map1], [...map2], [...map3], [...map4]);
     _utils.shuffleArray(maps);
     for (let index = 0; index < maps.length; index++) {
         for (let index2 = 0; index2 < index; index2++) {
-            maps[index] = _utils.rotateClockWise(maps[index], 8);
+            maps[index] = _utils.rotateClockWise(maps[index], mapWidth/2);
         }
     }
-    const upMap = joinMapHorizontal(maps[0], maps[1], 16);
-    const downMap = joinMapHorizontal(maps[3], maps[2], 16);
-    return computeBorderMap(joinMapVertical(upMap, downMap));
+    const upMap = joinMapHorizontal(maps[0], maps[1], mapWidth);
+    const downMap = joinMapHorizontal(maps[3], maps[2], mapWidth);
+    return setVictoryPos(computeBorderMap(joinMapVertical(upMap, downMap)),mapWidth);
 }
 

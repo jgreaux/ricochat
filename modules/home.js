@@ -1,4 +1,6 @@
-import {newGame, game, home} from "../app.js";
+import {stateGameState, newGame, game, home} from "../app.js";
+import { resetPawns, initPawns } from "./pawn.js";
+import { createMap } from "./map.js";
 
 export function createHome(){
     const myHome = document.createElement('div');
@@ -46,6 +48,12 @@ function addPlayer(namePlayer,listPlayers) {
     listPlayers.appendChild(listElm);
 }
 
+function initState(players) {
+    const map = createMap();
+    stateGameState({currentPlayer:0, players, map, pawns:initPawns(map)});
+    resetPawns();
+}
+
 function startPlay(listPlayers) {
     const listP = listPlayers.childNodes;
     if (listP.length === 0) {
@@ -63,7 +71,7 @@ function startPlay(listPlayers) {
 }
 
 function nameExist(name, listPlayers) {
-    const nodes = listPlayers.childNodes
+    const nodes = listPlayers.childNodes;
     for (let index = 0; index < nodes.length; index++) {
         const li = nodes[index];
         if(li.childNodes[0].innerHTML === name) {
@@ -72,8 +80,4 @@ function nameExist(name, listPlayers) {
         }
     }
     return false;
-}
-
-function initState(players) {
-    //gameState = {players, map:initMap(), pawns:initPawns()};
 }
