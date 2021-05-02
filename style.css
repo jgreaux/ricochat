@@ -4,6 +4,10 @@
 
 #add{
     float: right;
+    background-color: green;
+    border: none;
+    border-radius: 20px;
+    visibility: hidden;
 }
 
 ul {

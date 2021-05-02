@@ -3,14 +3,19 @@ import { resetPawns, initPawns } from "./pawn.js";
 import { createMap } from "./map.js";
 
 export function createHome(){
-    const myHome = document.createElement('div');
+    const myHome = document.createElement('form');
     myHome.id = 'home';
     const namePlayer = document.createElement('input');
     namePlayer.type = "text";
-    const buttonAdd = document.createElement('button');
+    namePlayer.placeholder = "Nom du Joueur";
+    const buttonAdd = document.createElement('input');
+    buttonAdd.addEventListener("click", function(event){
+        event.preventDefault();
+        addPlayer(namePlayer,listPlayers);
+      });
+    buttonAdd.type = "submit";
     buttonAdd.id = 'add';
-    buttonAdd.onclick = ()=> addPlayer(namePlayer,listPlayers);
-    buttonAdd.innerHTML = 'Add';
+    buttonAdd.value = '+';
     const listPlayers = document.createElement('ul');
     const buttonPlay = document.createElement('button');
     buttonPlay.innerHTML = 'PLAY';
@@ -48,6 +53,8 @@ function addPlayer(namePlayer,listPlayers) {
     listElm.appendChild(elmX);
 
     listPlayers.appendChild(listElm);
+    namePlayer.value = "";
+    namePlayer.focus();
 }
 
 function initState(players) {
