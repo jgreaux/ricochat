@@ -4,9 +4,11 @@ import { createMap } from "./map.js";
 
 export function createHome(){
     const myHome = document.createElement('div');
+    myHome.id = 'home';
     const namePlayer = document.createElement('input');
     namePlayer.type = "text";
     const buttonAdd = document.createElement('button');
+    buttonAdd.id = 'add';
     buttonAdd.onclick = ()=> addPlayer(namePlayer,listPlayers);
     buttonAdd.innerHTML = 'Add';
     const listPlayers = document.createElement('ul');

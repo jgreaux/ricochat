@@ -1,3 +1,41 @@
+#home{
+    width: 250px;
+}
+
+#add{
+    float: right;
+}
+
+ul {
+    list-style-type: none;
+    padding-inline-start: 0;
+}
+
+li{
+    margin-bottom: 10px;
+}
+  
+ul a{
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+ul button{
+    float: right;
+    background-color: red;
+    border: none;
+    border-radius: 20px;
+}
+
+.playerHeader{
+    width: 250px;
+    margin: auto;
+}
+
+.current_player_score{
+    float: right;
+}
+
 .pawn{
     position: absolute;
     margin: 1px;

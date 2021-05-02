@@ -1,6 +1,6 @@
 import {gameState, game, home} from "../app.js";
 import {mapToDOM} from "./map.js";
-import {mapManagedInput, createPawns, pawns, move, resetPawns} from "./pawn.js";
+import {mapManagedInput, createPawns, pawns, move, doMove, resetPawns} from "./pawn.js";
 
 let headerPlayerName;
 let headerPlayerScore;
@@ -15,6 +15,7 @@ const createHeaderPlayer = () =>{
     const players = gameState.players;
     const firstPlayerName = Object.keys(players)[0];
     const newHeader = document.createElement('div');
+    newHeader.classList.add('playerHeader');
     headerPlayerName = document.createElement('a');
     headerPlayerName.classList.add('current_player_name');
     headerPlayerName.innerHTML = firstPlayerName;
@@ -170,7 +171,20 @@ export const nextPlayer = () => {
         headerPlayerScore.innerHTML = score;
         resetPawns();
     }else{
-        alert("Félicitation, quelqu'un a gagné !");
+        alert(alertVictory());
         resetGame();
     }
+}
+
+function alertVictory() {
+    const players = Object.keys(gameState.players);
+    const classment = players.map((player)=>{
+        return {name:player, score:gameState.players[player]}
+    }).sort((a,b)=>a.score - b.score);
+    let res = "Félicitation " + classment[0].name + " a gagné !!! \n";
+    let recap = "";
+    classment.forEach((player)=>{
+        recap +=  player.name + " : " + player.score + "\n";
+    });
+    return res + recap;
 }

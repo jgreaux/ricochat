@@ -41,6 +41,7 @@ export function resetPawns() {
 }
 
 export function move (dir) {
+    if(currentPawn === null) return;
     const pawn = pawns[currentPawn.id];
     movePawn(computeDestination(pawn.pos, dir, mapWidth, pawn.color),mapWidth);
     playCat();
@@ -48,7 +49,7 @@ export function move (dir) {
     if(getVictoryPos(mapWidth).includes(pawn.pos)) setTimeout(nextPlayer,1000);
 }
 
-function doMove(dir){
+export function doMove(dir){
     move(dir);
     updateScore();
 }
@@ -127,4 +128,5 @@ export function createPawns (playground) {
         currentPawn = pawn;
         movePawn(pawns[element].pos, 16);
     });
+    currentPawn = null;
 }
