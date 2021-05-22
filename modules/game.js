@@ -11,6 +11,21 @@ export const updateScore = ()=>{
     }
 }
 
+const createVictoryMassage = (color) =>{
+    const msg = document.createElement('a');
+    msg.innerHTML = `Menez le chat ${color} aux croquettes !`;
+    return msg;
+}
+
+const setVictoryColor = () =>{
+    const colors = ['red', 'blue', 'green', 'yellow'];
+    const messageColor = ['rouge', 'bleu', 'vert', 'jaune'];
+    const selection = Math.floor(Math.random() * 3.99);
+
+    gameState.victoryColor = colors[selection];
+    return messageColor[selection];
+}
+
 const createHeaderPlayer = () =>{
     const players = gameState.players;
     const firstPlayerName = Object.keys(players)[0];
@@ -41,6 +56,7 @@ export const initGame = ()=>{
     mapToDOM(gameState.map, playground);
 
     newGame.appendChild(resetButton);
+    newGame.appendChild(createVictoryMassage(setVictoryColor()))
     newGame.appendChild(createHeaderPlayer());
     newGame.appendChild(playground);
     return newGame;
@@ -90,6 +106,7 @@ export function computeDestination (pos, direction, width, color) {
              if (currentStep !== 0) {
                 setTimeout(()=>{
                     move(getDir(currentStep, width))
+                    gameState.players[Object.keys(gameState.players)[gameState.currentPlayer]]--;
                 }, 1000);
              }
              destination = currentPos;

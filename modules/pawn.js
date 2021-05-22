@@ -21,13 +21,12 @@ export function initPawns(map) {
         }
         return newPos;
     };
-    const newPawns = {
+    return {
         pawn1: {pos:randomPawns(), color:'blue'},
         pawn2: {pos:randomPawns(), color:'green'},
         pawn3: {pos:randomPawns(), color:'yellow'},
         pawn4: {pos:randomPawns(), color:'red'}
     }
-    return newPawns;
 }
 
 export function resetPawns() {
@@ -46,7 +45,9 @@ export function move (dir) {
     movePawn(computeDestination(pawn.pos, dir, mapWidth, pawn.color),mapWidth);
     playCat();
     gameState.players[Object.keys(gameState.players)[gameState.currentPlayer]]++;
-    if(getVictoryPos(mapWidth).includes(pawn.pos)) setTimeout(nextPlayer,1000);
+    if(getVictoryPos(mapWidth).includes(pawn.pos) && pawn.color === gameState.victoryColor) {
+        setTimeout(nextPlayer,1000);
+    }
 }
 
 export function doMove(dir){
