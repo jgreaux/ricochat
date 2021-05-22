@@ -27,4 +27,4 @@ function initTestApp() {
     let listButton = document.getElementsByTagName('button');
     listButton[listButton.length - 1].click();
 }
-initTestApp();
+//initTestApp();
